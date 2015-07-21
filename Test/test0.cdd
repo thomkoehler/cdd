@@ -21,7 +21,7 @@ struct Person
   Int age;
 }
 
-interface I0
+interface Interface0
 {
   Int foo0();
   String foo1(Int p0, Double p1, String p2, Int64 p3, Int p4);
@@ -32,7 +32,7 @@ interface I0
   Person addPerson2(Int id, Person person);
 }
 
-interface I1
+interface Interface1
 {
   Void helloWorld(String prefix, String postfix);
 }
