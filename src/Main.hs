@@ -2,6 +2,10 @@
 
 module Main where
 
+import Language
+import CddLexer
+import CddParser
+
 ----------------------------------------------------------------------------------------------------
 
 main = putStrLn "Hello World"
