@@ -5,6 +5,7 @@ module Main where
 import Language
 import CddLexer
 import CddParser
+import Template.ClientInterfaceCpp
 
 ----------------------------------------------------------------------------------------------------
 
