@@ -1,0 +1,39 @@
+
+module Test(CINEMA.ProcessMonitor)
+
+
+struct Class0
+{
+  Int intAttr0;
+  Double doubleAttr0;
+}
+
+struct Class1
+{
+  Int intAttr1;
+  Double doubleAttr1;
+}
+
+struct Person
+{
+  String firstName;
+  String lastName;
+  Int age;
+}
+
+interface I0
+{
+  Int foo0();
+  String foo1(Int p0, Double p1, String p2, Int64 p3, Int p4);
+  Bool isEnabled();
+  Void printMessage(String message);
+  Void add(GetFilter gf, CndFilter cnd, Object obj);
+  CINEMA.ProcessMonitor.Person addPerson1(Int id, CINEMA.ProcessMonitor.Person person);
+  Person addPerson2(Int id, Person person);
+}
+
+interface I1
+{
+  Void helloWorld(String prefix, String postfix);
+}
+

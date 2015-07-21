@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------------------------
 
-{-# LANGUAGE QuasiQuotes, OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings, QuasiQuotes #-}
 
 module Template.ClientInterfaceCpp where
 
@@ -9,6 +9,7 @@ import qualified Data.ByteString as B
 import Text.StringEngine
 
 import Language
+import CppHelper
 
 ----------------------------------------------------------------------------------------------------
 
@@ -16,7 +17,7 @@ renderClientInterface :: Interface -> B.ByteString
 renderClientInterface interface = C.pack $ strEngine vars [str|
 
 class I<name>;
-typedef boost::shared_ptr<I<name>> <name>_ap;
+typedef boost::shared_ptr\<<name>\> I<name>_ap;
 
 class I<name>
 {
@@ -28,6 +29,7 @@ public:
 <end>
 
    static <name>_ap connect(const char* host, unsigned short port, int timeout);
+
 }; // class I<name>
 
 |]
@@ -35,17 +37,18 @@ public:
       vars =
          [
             Var "name" (infcName interface),
-            Var "methods" ([] :: [String])
+            Var "methods" (map renderInterfaceMethod (infcMethods interface))
          ]
 
 
-renderInterfaceMethod :: Method -> B.ByteString
-renderInterfaceMethod method = C.pack $ strEngine vars [str|virtual <retType> <name>() = 0;|]
+renderInterfaceMethod :: Method -> String
+renderInterfaceMethod method = strEngine vars [str|virtual <retType> <name>(<params>) = 0;|]
    where
       vars =
          [
-            Var "retType" "void",
-            Var "name" (metName method)
+            Var "retType" (renderType (metRetType method)),
+            Var "name" (metName method),
+            Var "params" (C.intercalate ", " (map renderParam (metParams method)))
          ]
 
 ----------------------------------------------------------------------------------------------------
