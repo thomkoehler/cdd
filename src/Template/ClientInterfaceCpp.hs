@@ -4,6 +4,7 @@
 
 module Template.ClientInterfaceCpp where
 
+import qualified Data.ByteString.Char8 as C
 import qualified Data.ByteString as B
 import Text.StringEngine
 
@@ -12,7 +13,7 @@ import Language
 ----------------------------------------------------------------------------------------------------
 
 renderClientInterface :: Interface -> B.ByteString
-renderClientInterface interface = strEngine vars [str|
+renderClientInterface interface = C.pack $ strEngine vars [str|
 
 class I<name>;
 typedef boost::shared_ptr<I<name>> <name>_ap;
@@ -34,12 +35,12 @@ public:
       vars =
          [
             Var "name" (infcName interface),
-            Var "methods" ["void foo()"]
+            Var "methods" ([] :: [String])
          ]
 
 
 renderInterfaceMethod :: Method -> B.ByteString
-renderInterfaceMethod method = strEngine vars [str|virtual <retType> <name>() = 0;|]
+renderInterfaceMethod method = C.pack $ strEngine vars [str|virtual <retType> <name>() = 0;|]
    where
       vars =
          [
