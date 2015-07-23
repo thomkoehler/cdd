@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------------------------
 
-{-# LANGUAGE OverloadedStrings, QuasiQuotes #-}
+{-# LANGUAGE QuasiQuotes #-}
 
 module Template.ClientInterfaceCpp where
 
@@ -48,7 +48,7 @@ renderInterfaceMethod method = strEngine vars [str|virtual <retType> <name>(<par
          [
             Var "retType" (renderType (metRetType method)),
             Var "name" (metName method),
-            Var "params" (C.intercalate ", " (map renderParam (metParams method)))
+            Var "params" (commaSep (map renderParam (metParams method)))
          ]
 
 ----------------------------------------------------------------------------------------------------

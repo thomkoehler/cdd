@@ -14,7 +14,8 @@ module CppHelper
    renderNs,
    attrToTypeFunction,
    renderMethodId,
-   headerDefine
+   headerDefine,
+   commaSep
 ) where
 
 import qualified Data.ByteString.Char8 as C
@@ -102,8 +103,8 @@ headerDefine :: FilePath -> Ns -> B.ByteString
 headerDefine fileBaseName ns =
    C.map toUpper $ B.concat [B.intercalate "_" (nsPath ns), "_", C.pack fileBaseName]
 
+
+commaSep :: [B.ByteString] -> B.ByteString
+commaSep = C.intercalate ", "
+
 ---------------------------------------------------------------------------------------------------
-
-
-
-
