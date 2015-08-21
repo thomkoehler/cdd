@@ -1,5 +1,7 @@
 ----------------------------------------------------------------------------------------------------
 
+{-# LANGUAGE QuasiQuotes #-}
+
 module Template.MethodIdsHeader(renderMethodIdsHeader) where
 
 import qualified Data.ByteString.Char8 as C
@@ -11,35 +13,45 @@ import CppHelper
 
 ----------------------------------------------------------------------------------------------------
 
-renderMethodIdsHeader :: FilePath -> Module -> T.Text
-renderMethodIdsHeader fileBaseName modul = [st|
-#ifndef #{headerDef}
-#define #{headerDef}
+renderMethodIdsHeader :: FilePath -> Module -> B.ByteString
+renderMethodIdsHeader fileBaseName modul = C.pack $ strEngine vars [str|
+#ifndef <headerDef>
+#define <headerDef>
 
-#{renderBeginNs ns}
-#{content}
-#{renderEndNs ns}
+<beginNs>
+<content>
+<endNsNs>
 
-#endif // #{headerDef}
+#endif // <headerDef>
 |]
    where
       ns = modNs modul
-      headerDef = headerDefine fileBaseName ns
-      content = T.unlines . map renderMethodIdsClass $ modInterfaces modul
+      vars =
+         [
+            Var "headerDef" (headerDefine fileBaseName ns),
+            Var "beginNs" (renderBeginNs ns),
+            Var "endNs" (renderEndNs ns),
+            Var "content" (C.unlines . map renderMethodIdsClass (modInterfaces modul))
+         ]
 
 
-renderMethodIdsClass :: Interface -> T.Text
-renderMethodIdsClass interface = [st|
-struct #{infcName interface}MethodIds
+renderMethodIdsClass :: Interface -> B.ByteString
+renderMethodIdsClass interface = C.pack $ strEngine vars [str|
+struct <infcName interface>MethodIds
 {
    enum MethodId
    {
-#{methodAssigns}
+<for assign in assigns>
+      <assign>
+<end>
    };
 };
 |]
    where
-      methodAssigns = unlinesIndent 6 . map renderMethodIdAssign . zip [100..] $ infcMethods interface
+      vars =
+         [
+            Var "methodAssigns" (map renderMethodIdAssign . zip [100..] (infcMethods interface))
+         ]
 
 
 renderMethodIdAssign :: (Int, Method) -> B.ByteString

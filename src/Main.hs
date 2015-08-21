@@ -9,6 +9,7 @@ import Language
 import CddLexer
 import CddParser
 import Template.ClientInterfaceCpp
+import Template.MethodIdsHeader
 
 ----------------------------------------------------------------------------------------------------
 
