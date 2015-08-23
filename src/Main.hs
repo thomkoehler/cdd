@@ -18,5 +18,7 @@ main = do
    let modul = parse "Test/test0.cdd" text
    let (i:_) = modInterfaces modul
    B.hPutStr stdout $ renderClientInterface i
+   putStrLn "//--------------------------------------------------------"
+   B.hPutStr stdout $ renderMethodIdsHeader "Test" modul
 
 ----------------------------------------------------------------------------------------------------

@@ -18,9 +18,12 @@ renderMethodIdsHeader fileBaseName modul = C.pack $ strEngine vars [str|
 #ifndef <headerDef>
 #define <headerDef>
 
+
 <beginNs>
+
 <content>
-<endNsNs>
+
+<endNs>
 
 #endif // <headerDef>
 |]
@@ -31,17 +34,17 @@ renderMethodIdsHeader fileBaseName modul = C.pack $ strEngine vars [str|
             Var "headerDef" (headerDefine fileBaseName ns),
             Var "beginNs" (renderBeginNs ns),
             Var "endNs" (renderEndNs ns),
-            Var "content" (C.unlines . map renderMethodIdsClass (modInterfaces modul))
+            Var "content" (C.unlines (map renderMethodIdsClass (modInterfaces modul)))
          ]
 
 
 renderMethodIdsClass :: Interface -> B.ByteString
 renderMethodIdsClass interface = C.pack $ strEngine vars [str|
-struct <infcName interface>MethodIds
+struct <iName>MethodIds
 {
    enum MethodId
    {
-<for assign in assigns>
+<for assign in methodAssigns>
       <assign>
 <end>
    };
@@ -50,13 +53,14 @@ struct <infcName interface>MethodIds
    where
       vars =
          [
-            Var "methodAssigns" (map renderMethodIdAssign . zip [100..] (infcMethods interface))
+            Var "iName" (infcName interface),
+            Var "methodAssigns" (map renderMethodIdAssign (zip [100..] (infcMethods interface)))
          ]
 
 
 renderMethodIdAssign :: (Int, Method) -> B.ByteString
 renderMethodIdAssign (methodId, name) = C.pack $ strEngine vars "<idName> = <idValue>,"
    where
-      vars = [Var "idName" (renderMethodId name), Var "idValue" methodId]
+      vars = [Var "idName" (renderMethodId name), Var "idValue" (show methodId)]
 
 ----------------------------------------------------------------------------------------------------
