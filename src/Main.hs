@@ -10,6 +10,7 @@ import CddLexer
 import CddParser
 import Template.ClientInterfaceCpp
 import Template.MethodIdsHeader
+import Template.ClientProxyCpp
 
 ----------------------------------------------------------------------------------------------------
 
