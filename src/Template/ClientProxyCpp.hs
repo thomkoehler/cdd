@@ -90,7 +90,7 @@ renderAssignParams :: Method -> B.ByteString
 renderAssignParams method = unlinesIndent 3 $ map renderAssignParam $ zip [1..] $ metParams method
 
 
-renderAssignParam :: (Int, (Type, T.Text)) -> B.ByteString
+renderAssignParam :: (Int, (Type, B.ByteString)) -> B.ByteString
 renderAssignParam (pos, (typ, name)) = if isCustomType typ
    then [st|
    params[P_#{pos}] = new CINEMA::AttrObject;
